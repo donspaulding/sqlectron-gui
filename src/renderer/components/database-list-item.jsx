@@ -41,6 +41,7 @@ export default class DatabaseListItem extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     currentDB: PropTypes.string,
+    isCurrentDB: PropTypes.bool,
     database: PropTypes.object.isRequired,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
@@ -115,9 +116,10 @@ export default class DatabaseListItem extends Component {
     this.setState({ collapsed: !this.state.collapsed });
   }
 
-  renderBody(isMetadataLoaded, isCurrentDB) {
+  renderBody(isMetadataLoaded) {
     const { filter } = this.state;
     const {
+      isCurrentDB,
       client,
       tables,
       columnsByTable,
@@ -231,10 +233,9 @@ export default class DatabaseListItem extends Component {
   }
 
   render() {
-    const { database, currentDB } = this.props;
+    const { database, isCurrentDB } = this.props;
 
     const isMetadataLoaded = this.isMetadataLoaded();
-    const isCurrentDB = currentDB === database.name;
 
     let styleComponent = {};
     if (isCurrentDB) {
