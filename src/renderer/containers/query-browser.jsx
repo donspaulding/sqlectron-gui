@@ -309,6 +309,21 @@ class QueryBrowserContainer extends Component {
     return databases.filter(db => regex.test(db.name));
   }
 
+  sortDatabases(databases, currentDB) {
+    return databases.sort((a, b) => {
+      if (a.name === currentDB){
+        return -1;
+      }
+      if (b.name === currentDB){
+        return 1;
+      }
+      if (a.name === b.name){
+        return 0;
+      }
+      return a.name < b.name ? -1 : 1;
+    });
+  }
+
   focusQuery() {
     const currentQuery = this.getCurrentQuery();
     if (!currentQuery) {
@@ -558,6 +573,7 @@ class QueryBrowserContainer extends Component {
     ] : [];
 
     const filteredDatabases = this.filterDatabases(filter, databases.items);
+    const sortedDatabases = this.sortDatabases(filteredDatabases, currentDB);
     return (
       <div style={STYLES.wrapper}>
         {isLoading && <Loader message={status} type="page" />}
@@ -593,7 +609,7 @@ class QueryBrowserContainer extends Component {
                 <DatabaseList
                   ref="databaseList"
                   client={connections.server.client}
-                  databases={filteredDatabases}
+                  databases={sortedDatabases}
                   currentDB={currentDB}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}
